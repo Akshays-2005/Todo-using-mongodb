@@ -1,51 +1,58 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const port= process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 var app = express();
-app.set("view engine","ejs");
-app.use(express.urlencoded({extended:true}));
+app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/ejs");
+const uri = process.env.MONGO_URI;
+// "mongodb+srv://akshayscs23_db_user:lBzP3hczmzBLrmFe@cluster0.kxo20eb.mongodb.net/todoDB?retryWrites=true&w=majority&appName=Cluster0"
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.error("MongoDB connection error:", err));
 const trySchema = new mongoose.Schema({
-    name:String
-}); 
-const Item = mongoose.model("task",trySchema);
+    name: String
+});
+const Item = mongoose.model("task", trySchema);
 
-app.get("/",function(req,res){
+app.get("/", function (req, res) {
     Item.find({})
-        .then(foundItems=> {
-            res.render("list",{ejes:foundItems});
+        .then(foundItems => {
+            res.render("list", { ejes: foundItems });
         })
-        .catch(err=> {
+        .catch(err => {
             console.log(err);
         });
 });
 
-app.post("/",function(req,res){
+app.post("/", function (req, res) {
     const itemName = req.body.ele1;
-    if(!itemName) return res.redirect("/?error=empty");
+    if (!itemName) return res.redirect("/?error=empty");
     const todo = new Item({
-        name:itemName
+        name: itemName
     });
     todo.save();
     res.redirect("/");
 });
 
-app.post("/delete",function(req,res){
-     const checked = req.body.checkbox1;
-     Item.findByIdAndDelete(checked)
-        .then(()=>{
+app.post("/delete", function (req, res) {
+    const checked = req.body.checkbox1;
+    Item.findByIdAndDelete(checked)
+        .then(() => {
             console.log("Deleted");
             res.redirect("/");
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
         });
 });
 
-app.listen(port,function(){
+app.listen(port, function () {
     console.log("Server started");
 });
