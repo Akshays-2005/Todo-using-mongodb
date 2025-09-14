@@ -8,14 +8,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 const mongoose = require("mongoose");
-const uri = process.env.MONGO_URI;
-// "mongodb+srv://akshayscs23_db_user:lBzP3hczmzBLrmFe@cluster0.kxo20eb.mongodb.net/todoDB?retryWrites=true&w=majority&appName=Cluster0"
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.error("MongoDB connection error:", err));
+
 const trySchema = new mongoose.Schema({
     name: String
 });
