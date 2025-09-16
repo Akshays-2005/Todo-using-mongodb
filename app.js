@@ -1,11 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const methodOverride=require("method-override");
 const port = process.env.PORT || 3000;
 
 var app = express();
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(methodOverride("_method"));
+require('dotenv').config();
 
 const mongoose = require("mongoose");
 
@@ -46,6 +49,19 @@ app.post("/delete", function (req, res) {
             res.redirect("/");
         })
         .catch(err => {
+            console.log(err);
+        });
+});
+
+app.put("/edit/:id",function(req,res){
+    const id=req.params.id;
+    const updatedtask=req.body;
+    Item.findByIdAndUpdate(id,updatedtask,{new:true})
+        .then(()=>{
+            console.log("Updated Task");
+            res.redirect("/");
+        })
+        .catch(err=>{
             console.log(err);
         });
 });

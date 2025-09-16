@@ -22,13 +22,15 @@
                     </p>
                 </div>
             </form>
+
+            <form action="/edit/<%= items.id %>?_method=put" method="post"  class="edit-form">
+                <input type="text" name="name" value="<%= items.name %>">
+                <button type="submit">✏️</button>
+            </form>
             <% }) %>
-
-
                 <form action="/" method="post">
                     <input type="text" name="ele1" placeholder="Enter the task">
                     <button type="submit">+</button>
-                    
                 </form>
     </div>
 
