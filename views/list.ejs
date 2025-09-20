@@ -17,16 +17,18 @@
             <form action="/delete" method="post">
                 <div class="item">
                     <input type="checkbox" name="checkbox1" value="<%= items._id %>" onchange="this.form.submit()">
-                    <p>
+                    <p id="task-<%= items._id %>">
                         <%= items.name %>
                     </p>
                 </div>
             </form>
 
-            <form action="/edit/<%= items.id %>?_method=put" method="post"  class="edit-form">
-                <input type="text" name="name" value="<%= items.name %>">
-                <button type="submit">✏️</button>
+            <form action="/edit/<%= items.id %>?_method=put" method="post" class="edit-form" id="form-<%=items._id %>"
+                onchange="this.form.submit()" style="display:none;">
+                <input type="text" name="name" value="<%= items.name %>" id="input-<%= items._id %>">
+                <button type="submit">💾</button>
             </form>
+            <button onclick="enableEdit('<%= items._id %>')" class="edit-btn">✏️</button>
             <% }) %>
                 <form action="/" method="post">
                     <input type="text" name="ele1" placeholder="Enter the task">
@@ -35,12 +37,18 @@
     </div>
 
     <script>
+        function enableEdit(id) {
+            // document.getElementById("task-" + id).style.display = "none";
+            document.getElementById("form-" + id).style.display = "inline-block";
+            event.target.style.display = "none";
+            // document.getElementById("input-" + id).focus();
+        }
+
         const params = new URLSearchParams(window.location.search);
         if (params.get("error") === "empty") {
             alert("Task cannot be empty!");
         }
     </script>
-
 
 </body>
 

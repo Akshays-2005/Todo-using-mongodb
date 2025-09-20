@@ -68,6 +68,10 @@ button {
     margin-top: 3px;
 }
 
+.edit-btn{
+    margin-left: 50%;
+}
+
 input[type="text"] {
     text-align: center;
     height: 60px;
