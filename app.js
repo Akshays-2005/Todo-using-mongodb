@@ -67,19 +67,6 @@ app.put("/edit/:id",function(req,res){
         });
 });
 
-app.put("/complete/:id",function(req,res){
-    const id=req.params.id;
-    const completed= req.body.completed==="on";
-    Item.findByIdAndUpdate(id,{completed: completed},{new: true})
-        .then(()=>{
-            res.redirect("/");
-        })
-        .catch(err=>{
-            console.log(err);
-            
-        });
-});
-
 app.listen(port, function () {
     console.log("Server started");
 });
