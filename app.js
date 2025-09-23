@@ -17,7 +17,8 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.error("MongoDB connection error:", err));
 
 const trySchema = new mongoose.Schema({
-    name: String
+    name: String,
+    completed: { type: Boolean, default: false }
 });
 const Item = mongoose.model("task", trySchema);
 
@@ -63,6 +64,19 @@ app.put("/edit/:id",function(req,res){
         })
         .catch(err=>{
             console.log(err);
+        });
+});
+
+app.put("/complete/:id",function(req,res){
+    const id=req.params.id;
+    const completed= req.body.completed==="on";
+    Item.findByIdAndUpdate(id,{completed: completed},{new: true})
+        .then(()=>{
+            res.redirect("/");
+        })
+        .catch(err=>{
+            console.log(err);
+            
         });
 });
 

@@ -14,34 +14,37 @@
     </div>
     <div class="box">
         <% ejes.forEach(function(items){ %>
-            <form action="/delete" method="post">
-                <div class="item">
-                    <input type="checkbox" name="checkbox1" value="<%= items._id %>" onchange="this.form.submit()">
-                    <p id="task-<%= items._id %>">
+            <div class="item">
+                <form action="/complete/<%= items._id %>?_method=put" method="post">
+                    <input type="checkbox" name="completed" <%=items.completed ? "checked" : "" %>
+                    onchange="this.form.submit()">
+                    <p id="task-<%= items._id %>" class="<%= items.completed ? 'done' : '' %>">
                         <%= items.name %>
                     </p>
-                </div>
-            </form>
+                </form>
 
+                <button onclick="enableEdit('<%= items._id %>')" class="edit-btn">✏️</button>
+                <form action="/delete" method="post">
+                    <input type="hidden" name="checkbox1" value="<%= items._id %>">
+                    <button type="submit">🗑️</button>
+                </form>
+            </div>
             <form action="/edit/<%= items.id %>?_method=put" method="post" class="edit-form" id="form-<%=items._id %>"
                 onchange="this.form.submit()" style="display:none;">
                 <input type="text" name="name" value="<%= items.name %>" id="input-<%= items._id %>">
                 <button type="submit">💾</button>
             </form>
-            <button onclick="enableEdit('<%= items._id %>')" class="edit-btn">✏️</button>
             <% }) %>
                 <form action="/" method="post">
                     <input type="text" name="ele1" placeholder="Enter the task">
-                    <button type="submit">+</button>
+                    <button type="submit" class="btn">+</button>
                 </form>
     </div>
 
     <script>
         function enableEdit(id) {
-            // document.getElementById("task-" + id).style.display = "none";
             document.getElementById("form-" + id).style.display = "inline-block";
             event.target.style.display = "none";
-            // document.getElementById("input-" + id).focus();
         }
 
         const params = new URLSearchParams(window.location.search);
